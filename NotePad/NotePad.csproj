@@ -6,4 +6,8 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\notepad.png" />
+  </ItemGroup>
 </Project>

@@ -16,6 +16,7 @@ public class MainForm : Form
         Size = new Size(900, 650);
         MinimumSize = new Size(400, 300);
         StartPosition = FormStartPosition.CenterScreen;
+        Icon = LoadIcon();
 
         InitializeEditor();
         InitializeMenu();
@@ -317,5 +318,11 @@ public class MainForm : Form
         }
 
         base.OnFormClosing(e);
+    }
+
+    private static Icon LoadIcon()
+    {
+        using var stream = typeof(MainForm).Assembly.GetManifestResourceStream("NotePad.Resources.notepad.png");
+        return stream is not null ? new Icon(stream) : SystemIcons.Application;
     }
 }
