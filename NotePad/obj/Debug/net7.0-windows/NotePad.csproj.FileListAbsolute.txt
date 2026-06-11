@@ -1,0 +1,14 @@
+C:\Users\xylem\Documents\vsCode\notetakingapp\NotePad\obj\Debug\net7.0-windows\NotePad.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\xylem\Documents\vsCode\notetakingapp\NotePad\obj\Debug\net7.0-windows\NotePad.AssemblyInfoInputs.cache
+C:\Users\xylem\Documents\vsCode\notetakingapp\NotePad\obj\Debug\net7.0-windows\NotePad.AssemblyInfo.cs
+C:\Users\xylem\Documents\vsCode\notetakingapp\NotePad\obj\Debug\net7.0-windows\NotePad.csproj.CoreCompileInputs.cache
+C:\Users\xylem\Documents\vsCode\notetakingapp\NotePad\bin\Debug\net7.0-windows\NotePad.exe
+C:\Users\xylem\Documents\vsCode\notetakingapp\NotePad\bin\Debug\net7.0-windows\NotePad.deps.json
+C:\Users\xylem\Documents\vsCode\notetakingapp\NotePad\bin\Debug\net7.0-windows\NotePad.runtimeconfig.json
+C:\Users\xylem\Documents\vsCode\notetakingapp\NotePad\bin\Debug\net7.0-windows\NotePad.dll
+C:\Users\xylem\Documents\vsCode\notetakingapp\NotePad\bin\Debug\net7.0-windows\NotePad.pdb
+C:\Users\xylem\Documents\vsCode\notetakingapp\NotePad\obj\Debug\net7.0-windows\NotePad.dll
+C:\Users\xylem\Documents\vsCode\notetakingapp\NotePad\obj\Debug\net7.0-windows\refint\NotePad.dll
+C:\Users\xylem\Documents\vsCode\notetakingapp\NotePad\obj\Debug\net7.0-windows\NotePad.pdb
+C:\Users\xylem\Documents\vsCode\notetakingapp\NotePad\obj\Debug\net7.0-windows\NotePad.genruntimeconfig.cache
+C:\Users\xylem\Documents\vsCode\notetakingapp\NotePad\obj\Debug\net7.0-windows\ref\NotePad.dll
