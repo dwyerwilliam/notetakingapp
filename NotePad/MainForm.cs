@@ -66,7 +66,9 @@ public class MainForm : Form
             Font = new Font("Consolas", 10f),
             AcceptsReturn = true,
             AcceptsTab = true,
-            ScrollBars = ScrollBars.Both
+            ScrollBars = ScrollBars.Both,
+            ForeColor = Color.Black,
+            BackColor = Color.White
         };
         _editor.TextChanged += OnEditorTextChanged;
 
