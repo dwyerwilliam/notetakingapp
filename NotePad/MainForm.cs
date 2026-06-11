@@ -73,6 +73,7 @@ public class MainForm : Form
         _editor.TextChanged += OnEditorTextChanged;
 
         Controls.Add(_editor);
+        _editor.SendToBack();
     }
 
     private void InitializeStatusBar()

@@ -8,10 +8,14 @@ public class StatusBar : UserControl
 
     public StatusBar()
     {
+        Dock = DockStyle.Bottom;
+
         var strip = new StatusStrip
         {
             Dock = DockStyle.Fill,
-            Padding = new Padding(2, 0, 2, 0)
+            Padding = new Padding(2, 0, 2, 0),
+            BackColor = SystemColors.Control,
+            ForeColor = SystemColors.ControlText
         };
 
         _lineLabel = new ToolStripStatusLabel("Lines: 1")
