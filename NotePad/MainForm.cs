@@ -55,6 +55,7 @@ public class MainForm : Form
         menuStrip.Items.Add(editMenu);
 
         Controls.Add(menuStrip);
+        menuStrip.BringToFront();
     }
 
     private void InitializeEditor()
@@ -78,7 +79,11 @@ public class MainForm : Form
 
     private void InitializeStatusBar()
     {
-        _statusBar = new StatusBar { Dock = DockStyle.Bottom };
+        _statusBar = new StatusBar
+        {
+            Dock = DockStyle.Bottom,
+            Height = 24
+        };
         Controls.Add(_statusBar);
         _statusBar.BringToFront();
     }
