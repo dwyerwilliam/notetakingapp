@@ -123,6 +123,8 @@ public class MainForm : Form
     private void OnEditorTextChanged(object? sender, EventArgs e)
     {
         _store.SetDirty(true);
+        _lineLabel.Text = $"Lines: {_editor.Lines.Length}";
+        _charLabel.Text = $"Chars: {_editor.Text.Length}";
     }
 
     // --- File menu handlers ---
