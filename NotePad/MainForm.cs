@@ -10,7 +10,7 @@ public class MainForm : Form
     private StatusBar _statusBar = null!;
     private TextBox _editor = null!;
 
-    public MainForm()
+    public MainForm(string? initialFile = null)
     {
         Text = "NotePad - Untitled";
         Size = new Size(900, 650);
@@ -21,6 +21,24 @@ public class MainForm : Form
         InitializeMenu();
         InitializeStatusBar();
         SubscribeToStore();
+
+        if (initialFile is not null)
+            OpenFile(initialFile);
+    }
+
+    private void OpenFile(string path)
+    {
+        try
+        {
+            var content = FileService.ReadFile(path);
+            _store.Open(path, content);
+            _editor.Text = content;
+            _statusBar.UpdateStatus($"Opened: {Path.GetFileName(path)}");
+        }
+        catch (Exception ex)
+        {
+            ShowError($"Failed to open file:\n{ex.Message}");
+        }
     }
 
     private void InitializeMenu()

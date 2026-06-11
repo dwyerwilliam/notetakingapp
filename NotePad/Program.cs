@@ -3,9 +3,14 @@ namespace NotePad;
 static class Program
 {
     [STAThread]
-    static void Main()
+    static void Main(string[] args)
     {
         ApplicationConfiguration.Initialize();
-        Application.Run(new MainForm());
+
+        string? filePath = null;
+        if (args.Length > 0 && File.Exists(args[0]))
+            filePath = args[0];
+
+        Application.Run(new MainForm(filePath));
     }
 }
