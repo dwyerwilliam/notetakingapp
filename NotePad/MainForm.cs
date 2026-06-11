@@ -1,3 +1,4 @@
+using NotePad.Controls;
 using NotePad.Models;
 using NotePad.Services;
 
@@ -6,11 +7,8 @@ namespace NotePad;
 public class MainForm : Form
 {
     private readonly DocumentStore _store = DocumentStore.Instance;
+    private StatusBar _statusBar = null!;
     private TextBox _editor = null!;
-    private StatusStrip _statusStrip = null!;
-    private ToolStripStatusLabel _lineLabel = null!;
-    private ToolStripStatusLabel _charLabel = null!;
-    private ToolStripStatusLabel _statusLabel = null!;
 
     public MainForm()
     {
@@ -36,6 +34,7 @@ public class MainForm : Form
             CreateMenuItem("&New", Keys.Control | Keys.N, OnNew),
             CreateMenuItem("&Open...", Keys.Control | Keys.O, OnOpen),
             CreateMenuItem("&Save", Keys.Control | Keys.S, OnSave),
+            CreateMenuItem("Save &As...", Keys.Shift | Keys.Control | Keys.S, OnSaveAs),
             new ToolStripSeparator(),
             CreateMenuItem("E&xit", Keys.None, OnExit)
         });
@@ -76,16 +75,9 @@ public class MainForm : Form
 
     private void InitializeStatusBar()
     {
-        _statusStrip = new StatusStrip { Dock = DockStyle.Bottom };
-
-        _lineLabel = new ToolStripStatusLabel("Lines: 1");
-        _charLabel = new ToolStripStatusLabel("Chars: 0");
-        _statusLabel = new ToolStripStatusLabel("Ready");
-
-        _statusStrip.Items.AddRange(new ToolStripItem[] { _lineLabel, _charLabel, _statusLabel });
-        Controls.Add(_statusStrip);
-
-        _statusStrip.BringToFront();
+        _statusBar = new StatusBar { Dock = DockStyle.Bottom };
+        Controls.Add(_statusBar);
+        _statusBar.BringToFront();
     }
 
     private void SubscribeToStore()
@@ -116,15 +108,13 @@ public class MainForm : Form
     private void UpdateStatusBar()
     {
         var state = _store.State;
-        _lineLabel.Text = $"Lines: {state.LineCount}";
-        _charLabel.Text = $"Chars: {state.CharCount}";
+        _statusBar.UpdateCounts(state.LineCount, state.CharCount);
     }
 
     private void OnEditorTextChanged(object? sender, EventArgs e)
     {
         _store.SetDirty(true);
-        _lineLabel.Text = $"Lines: {_editor.Lines.Length}";
-        _charLabel.Text = $"Chars: {_editor.Text.Length}";
+        _statusBar.UpdateCounts(_editor.Lines.Length, _editor.Text.Length);
     }
 
     // --- File menu handlers ---
@@ -135,7 +125,7 @@ public class MainForm : Form
         {
             _store.Reset();
             _editor.Text = string.Empty;
-            _statusLabel.Text = "New document created";
+            _statusBar.UpdateStatus("New document created");
         }
         catch (Exception ex)
         {
@@ -154,7 +144,7 @@ public class MainForm : Form
             var content = FileService.ReadFile(path);
             _store.Open(path, content);
             _editor.Text = content;
-            _statusLabel.Text = $"Opened: {Path.GetFileName(path)}";
+            _statusBar.UpdateStatus($"Opened: {Path.GetFileName(path)}");
         }
         catch (Exception ex)
         {
@@ -177,14 +167,33 @@ public class MainForm : Form
 
                 FileService.WriteFile(path, content);
                 _store.Save(content, path);
-                _statusLabel.Text = $"Saved: {Path.GetFileName(path)}";
+                _statusBar.UpdateStatus($"Saved: {Path.GetFileName(path)}");
             }
             else
             {
                 FileService.WriteFile(state.Filename, content);
                 _store.Save(content);
-                _statusLabel.Text = $"Saved: {Path.GetFileName(state.Filename)}";
+                _statusBar.UpdateStatus($"Saved: {Path.GetFileName(state.Filename)}");
             }
+        }
+        catch (Exception ex)
+        {
+            ShowError(ex.Message);
+        }
+    }
+
+    private void OnSaveAs(object? sender, EventArgs e)
+    {
+        try
+        {
+            var path = FileService.ShowSaveDialog(this);
+            if (path is null)
+                return;
+
+            FileService.WriteFile(path, _editor.Text);
+            _store.SaveAs(_editor.Text);
+            _store.State.Filename = path;
+            _statusBar.UpdateStatus($"Saved as: {Path.GetFileName(path)}");
         }
         catch (Exception ex)
         {

@@ -39,6 +39,13 @@ public sealed class DocumentStore
         NotifyStateChanged();
     }
 
+    public void SaveAs(string content)
+    {
+        State.Content = content;
+        State.Dirty = false;
+        NotifyStateChanged();
+    }
+
     public void Reset()
     {
         State.Filename = null;
