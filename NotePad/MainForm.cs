@@ -72,6 +72,10 @@ public class MainForm : Form
         });
         menuStrip.Items.Add(editMenu);
 
+        var helpMenu = new ToolStripMenuItem("&Help");
+        helpMenu.DropDownItems.Add(CreateMenuItem("&About", Keys.None, OnAbout));
+        menuStrip.Items.Add(helpMenu);
+
         MainMenuStrip = menuStrip;
         Controls.Add(menuStrip);
     }
@@ -235,6 +239,19 @@ public class MainForm : Form
     private void OnCopy(object? sender, EventArgs e) => _editor.Copy();
     private void OnPaste(object? sender, EventArgs e) => _editor.Paste();
     private void OnSelectAll(object? sender, EventArgs e) => _editor.SelectAll();
+
+    private void OnAbout(object? sender, EventArgs e)
+    {
+        MessageBox.Show(
+            "NotePad v1.0\n\n" +
+            "A simple text editor built with .NET 7 WinForms.\n\n" +
+            "Developed with Bill Dwyer.\n\n" +
+            $"Built: {DateTime.Now:MMMM dd, yyyy}\n\n" +
+            "© 2026 All rights reserved.",
+            "About NotePad",
+            MessageBoxButtons.OK,
+            MessageBoxIcon.Information);
+    }
 
     // --- Helpers ---
 
