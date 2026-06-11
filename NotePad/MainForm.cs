@@ -17,8 +17,8 @@ public class MainForm : Form
         MinimumSize = new Size(400, 300);
         StartPosition = FormStartPosition.CenterScreen;
 
-        InitializeMenu();
         InitializeEditor();
+        InitializeMenu();
         InitializeStatusBar();
         SubscribeToStore();
     }
@@ -54,8 +54,8 @@ public class MainForm : Form
         });
         menuStrip.Items.Add(editMenu);
 
+        MainMenuStrip = menuStrip;
         Controls.Add(menuStrip);
-        menuStrip.BringToFront();
     }
 
     private void InitializeEditor()
@@ -74,7 +74,6 @@ public class MainForm : Form
         _editor.TextChanged += OnEditorTextChanged;
 
         Controls.Add(_editor);
-        _editor.SendToBack();
     }
 
     private void InitializeStatusBar()
@@ -82,10 +81,9 @@ public class MainForm : Form
         _statusBar = new StatusBar
         {
             Dock = DockStyle.Bottom,
-            Height = 24
+            Height = 30
         };
         Controls.Add(_statusBar);
-        _statusBar.BringToFront();
     }
 
     private void SubscribeToStore()
