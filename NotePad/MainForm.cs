@@ -8,7 +8,7 @@ public class MainForm : Form
 {
     private readonly DocumentStore _store = DocumentStore.Instance;
     private StatusBar _statusBar = null!;
-    private TextBox _editor = null!;
+    private RichTextBox _editor = null!;
 
     public MainForm(string? initialFile = null)
     {
@@ -78,16 +78,14 @@ public class MainForm : Form
 
     private void InitializeEditor()
     {
-        _editor = new TextBox
+        _editor = new RichTextBox
         {
             Dock = DockStyle.Fill,
-            Multiline = true,
             Font = new Font("Consolas", 10f),
-            AcceptsReturn = true,
-            AcceptsTab = true,
-            ScrollBars = ScrollBars.Both,
+            ScrollBars = RichTextBoxScrollBars.ForcedBoth,
             ForeColor = Color.Black,
-            BackColor = Color.White
+            BackColor = Color.White,
+            WordWrap = false
         };
         _editor.TextChanged += OnEditorTextChanged;
 
