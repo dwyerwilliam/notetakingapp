@@ -2,6 +2,7 @@ namespace NotePad.Controls;
 
 public class StatusBar : UserControl
 {
+    private readonly StatusStrip _strip;
     private readonly ToolStripStatusLabel _lineLabel;
     private readonly ToolStripStatusLabel _charLabel;
     private readonly ToolStripStatusLabel _statusLabel;
@@ -10,7 +11,7 @@ public class StatusBar : UserControl
     {
         Dock = DockStyle.Bottom;
 
-        var strip = new StatusStrip
+        _strip = new StatusStrip
         {
             Dock = DockStyle.Fill,
             Padding = new Padding(2, 0, 2, 0),
@@ -32,8 +33,8 @@ public class StatusBar : UserControl
             TextAlign = ContentAlignment.MiddleRight
         };
 
-        strip.Items.AddRange(new ToolStripItem[] { _lineLabel, _charLabel, _statusLabel });
-        Controls.Add(strip);
+        _strip.Items.AddRange(new ToolStripItem[] { _lineLabel, _charLabel, _statusLabel });
+        Controls.Add(_strip);
     }
 
     public void UpdateCounts(int lines, int chars)
@@ -45,5 +46,14 @@ public class StatusBar : UserControl
     public void UpdateStatus(string message)
     {
         _statusLabel.Text = message;
+    }
+
+    protected override void Dispose(bool disposing)
+    {
+        if (disposing)
+        {
+            _strip.Dispose();
+        }
+        base.Dispose(disposing);
     }
 }

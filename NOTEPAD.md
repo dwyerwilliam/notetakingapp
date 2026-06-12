@@ -29,6 +29,7 @@ A simple, lightweight Windows desktop note-taking application built with a moder
 - Fast startup, minimal memory footprint
 - Windows 10+ compatible
 - Clean separation of concerns for modular development
+- **Dark mode support**: auto-detect system theme, apply matching colors across all UI elements
 
 ---
 
@@ -45,7 +46,8 @@ NotePad/
 │   │   └── DocumentState.cs        # Document state: filename, content, dirty, charCount
 │   ├── Services/
 │   │   ├── DocumentStore.cs        # Central document state management
-│   │   └── FileService.cs          # File I/O: open, save, save-as operations
+│   │   ├── FileService.cs          # File I/O: open, save, save-as operations
+│   │   └── ThemeService.cs         # Dark/light theme detection and color management
 │   └── Controls/
 │       └── StatusBar.cs            # Custom status bar control (lines, chars, status)
 └── README.md
@@ -60,6 +62,7 @@ NotePad/
 | `DocumentState.cs`  | POCO holding filename, content, dirty flag, char count     |
 | `DocumentStore.cs`  | Singleton managing DocumentState, raises Changed events    |
 | `FileService.cs`    | File I/O: OpenFileDialog/SaveFileDialog, read/write disk   |
+| `ThemeService.cs`   | Detect system theme, provide color palette, notify on change |
 | `StatusBar.cs`      | Custom UserControl showing lines, characters, status msg   |
 
 ---
@@ -267,9 +270,10 @@ All file operations in `MainForm` are wrapped in `try/catch` blocks that route t
 
 | Layer        | Technology                    | Rationale                              |
 |-------------|-------------------------------|----------------------------------------|
-| Runtime     | .NET 7                        | Current SDK available, native Windows performance |
+| Runtime     | .NET 9                        | RTF security patches (CVE-2023-36449), dark mode APIs |
 | Framework   | Windows Forms                 | Native desktop UI, minimal overhead    |
-| Language    | C# 11                         | Nullable refs, raw strings, file-scoped namespaces |
+| Editor      | `RichTextBox`                 | Full Undo/Redo/Cut/Copy/Paste/SelectAll support required |
+| Language    | C# 13                         | Nullable refs, file-scoped namespaces, primary constructors |
 | File I/O    | `System.IO` + CommonDialog    | Built-in, no external dependencies     |
 | Packaging   | `dotnet publish -r win-x64`   | Single-file self-contained executable  |
 
@@ -285,7 +289,7 @@ Each task should be completed sequentially and independently verifiable.
 |----|-----------------------------------|-------------------------------------------------------|
 | 1  | Scaffold .NET 9 WinForms project  | `NotePad.sln`, `NotePad.csproj`, `dotnet build` OK    |
 | 2  | Create `Program.cs` entry point   | App launches, shows `MainForm`                        |
-| 3  | Build `MainForm` shell            | Window with menu strip, TextBox editor, status label  |
+| 3  | Build `MainForm` shell            | Window with menu strip, RichTextBox editor, status label  |
 | 4  | Implement `DocumentState` model   | POCO with `Filename`, `Content`, `Dirty`, counts      |
 | 5  | Implement `DocumentStore`         | Singleton with `StateChanged` event, `Open/Save/Reset`|
 
@@ -360,11 +364,31 @@ dotnet publish -c Release -r win-x64 --self-contained true -p:PublishSingleFile=
 - No dark/light theme toggle (can be layered on top of editor later)
 - No search and replace (add to Edit menu in v2, see below)
 
+### ThemeService API
+
+```csharp
+public static class ThemeService
+{
+    public static bool IsDarkMode { get; }
+    public static event Action<bool>? ThemeChanged;
+    public static Colors GetColors();
+    public static void ApplyToForm(Form form);
+}
+
+public record Colors(
+    Color EditorBackground,
+    Color EditorForeground,
+    Color MenuBackground,
+    Color MenuForeground,
+    Color StatusBarBackground,
+    Color StatusBarForeground
+);
+```
+
 ### Planned Future Features
 
 | #    | Feature              | Module to Add               |
 |------|----------------------|-----------------------------|
 | FF-1 | Tabbed editing       | `TabManager.cs`             |
-| FF-2 | Dark mode            | `ThemeProvider.cs`          |
-| FF-3 | Find/Replace         | `FindReplaceForm.cs`        |
-| FF-4 | Auto-save toggle     | `SettingsStore.cs`          |
+| FF-2 | Find/Replace         | `FindReplaceForm.cs`        |
+| FF-3 | Auto-save toggle     | `SettingsStore.cs`          |

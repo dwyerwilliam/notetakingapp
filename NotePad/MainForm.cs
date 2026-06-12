@@ -218,8 +218,7 @@ public class MainForm : Form
                 return;
 
             FileService.WriteFile(path, _editor.Text);
-            _store.SaveAs(_editor.Text);
-            _store.State.Filename = path;
+            _store.SaveAs(_editor.Text, path);
             _statusBar.UpdateStatus($"Saved as: {Path.GetFileName(path)}");
         }
         catch (Exception ex)
@@ -322,7 +321,20 @@ public class MainForm : Form
 
     private static Icon LoadIcon()
     {
-        using var stream = typeof(MainForm).Assembly.GetManifestResourceStream("NotePad.Resources.notepad.png");
-        return stream is not null ? new Icon(stream) : SystemIcons.Application;
+        try
+        {
+            using var stream = typeof(MainForm).Assembly.GetManifestResourceStream("NotePad.Resources.notepad.png");
+            if (stream is not null)
+            {
+                using var bitmap = new Bitmap(stream);
+                return Icon.FromHandle(bitmap.GetHicon());
+            }
+        }
+        catch
+        {
+            return SystemIcons.Application;
+        }
+
+        return SystemIcons.Application;
     }
 }
