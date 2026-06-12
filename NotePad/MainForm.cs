@@ -7,6 +7,7 @@ namespace NotePad;
 public class MainForm : Form
 {
     private readonly DocumentStore _store = DocumentStore.Instance;
+    private MenuStrip _menuStrip = null!;
     private StatusBar _statusBar = null!;
     private RichTextBox _editor = null!;
 
@@ -44,7 +45,7 @@ public class MainForm : Form
 
     private void InitializeMenu()
     {
-        var menuStrip = new MenuStrip { Dock = DockStyle.Top };
+        _menuStrip = new MenuStrip();
 
         // File menu
         var fileMenu = new ToolStripMenuItem("&File");
@@ -57,7 +58,7 @@ public class MainForm : Form
             new ToolStripSeparator(),
             CreateMenuItem("E&xit", Keys.None, OnExit)
         });
-        menuStrip.Items.Add(fileMenu);
+        _menuStrip.Items.Add(fileMenu);
 
         // Edit menu
         var editMenu = new ToolStripMenuItem("&Edit");
@@ -71,21 +72,22 @@ public class MainForm : Form
             new ToolStripSeparator(),
             CreateMenuItem("Select &All", Keys.Control | Keys.A, OnSelectAll)
         });
-        menuStrip.Items.Add(editMenu);
+        _menuStrip.Items.Add(editMenu);
 
         var helpMenu = new ToolStripMenuItem("&Help");
         helpMenu.DropDownItems.Add(CreateMenuItem("&About", Keys.None, OnAbout));
-        menuStrip.Items.Add(helpMenu);
+        helpMenu.Alignment = ToolStripItemAlignment.Right;
+        _menuStrip.Items.Add(helpMenu);
 
-        MainMenuStrip = menuStrip;
-        Controls.Add(menuStrip);
+        MainMenuStrip = _menuStrip;
+        Controls.Add(_menuStrip);
     }
 
     private void InitializeEditor()
     {
         _editor = new RichTextBox
         {
-            Dock = DockStyle.Fill,
+            Dock = DockStyle.None,
             Font = new Font("Consolas", 10f),
             ScrollBars = RichTextBoxScrollBars.ForcedBoth,
             ForeColor = Color.Black,
@@ -95,6 +97,25 @@ public class MainForm : Form
         _editor.TextChanged += OnEditorTextChanged;
 
         Controls.Add(_editor);
+    }
+
+    protected override void OnLayout(LayoutEventArgs levent)
+    {
+        base.OnLayout(levent);
+        LayoutEditorBelowMenu();
+    }
+
+    private void LayoutEditorBelowMenu()
+    {
+        if (_menuStrip is null || _statusBar is null || _editor is null)
+            return;
+
+        var top = _menuStrip.Bottom;
+        var bottom = _statusBar.Top > top ? _statusBar.Top : ClientSize.Height;
+        var bounds = new Rectangle(0, top, ClientSize.Width, Math.Max(0, bottom - top));
+
+        if (_editor.Bounds != bounds)
+            _editor.Bounds = bounds;
     }
 
     private void InitializeStatusBar()
