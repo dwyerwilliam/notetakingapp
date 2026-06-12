@@ -9,6 +9,7 @@ public class MainForm : Form
     private readonly DocumentStore _store = DocumentStore.Instance;
     private MenuStrip _menuStrip = null!;
     private StatusBar _statusBar = null!;
+    private LineNumbers _lineNumbers = null!;
     private RichTextBox _editor = null!;
 
     public MainForm(string? initialFile = null)
@@ -23,6 +24,7 @@ public class MainForm : Form
         InitializeStatusBar();
         InitializeEditor();
         SubscribeToStore();
+        SubscribeToTheme();
 
         if (initialFile is not null)
             OpenFile(initialFile);
@@ -92,13 +94,16 @@ public class MainForm : Form
             Dock = DockStyle.None,
             Font = new Font("Consolas", 10f),
             ScrollBars = RichTextBoxScrollBars.ForcedBoth,
-            ForeColor = Color.Black,
-            BackColor = Color.White,
+            ForeColor = SystemColors.WindowText,
+            BackColor = SystemColors.Window,
             WordWrap = false
         };
         _editor.TextChanged += OnEditorTextChanged;
+        _editor.VScroll += (_, _) => _lineNumbers.RefreshLineNumbers();
+        _editor.MouseUp += (_, _) => _lineNumbers.RefreshLineNumbers();
 
-        Controls.Add(_editor);
+        _lineNumbers = new LineNumbers(_editor);
+        Controls.AddRange(new Control[] { _lineNumbers, _editor });
     }
 
     protected override void OnLayout(LayoutEventArgs levent)
@@ -109,15 +114,16 @@ public class MainForm : Form
 
     private void LayoutEditorBelowMenu()
     {
-        if (_menuStrip is null || _statusBar is null || _editor is null)
+        if (_menuStrip is null || _statusBar is null || _editor is null || _lineNumbers is null)
             return;
 
+        var gutterWidth = _lineNumbers.Width;
         var top = _menuStrip.Bottom;
         var bottom = _statusBar.Top > top ? _statusBar.Top : ClientSize.Height;
-        var bounds = new Rectangle(0, top, ClientSize.Width, Math.Max(0, bottom - top));
+        var editorBounds = new Rectangle(gutterWidth, top, ClientSize.Width - gutterWidth, Math.Max(0, bottom - top));
 
-        if (_editor.Bounds != bounds)
-            _editor.Bounds = bounds;
+        if (_editor.Bounds != editorBounds)
+            _editor.Bounds = editorBounds;
     }
 
     private void InitializeStatusBar()
@@ -133,6 +139,23 @@ public class MainForm : Form
     private void SubscribeToStore()
     {
         _store.StateChanged += OnStateChanged;
+    }
+
+    private void SubscribeToTheme()
+    {
+        ThemeHelper.ApplyTheme(this);
+        ThemeHelper.ThemeChanged += OnThemeChanged;
+    }
+
+    private void OnThemeChanged(object? sender, EventArgs e)
+    {
+        Invoke(new Action(() =>
+        {
+            ThemeHelper.ApplyTheme(this);
+            _editor.BackColor = SystemColors.Window;
+            _editor.ForeColor = SystemColors.WindowText;
+            _lineNumbers.RefreshLineNumbers();
+        }));
     }
 
     private void OnStateChanged(DocumentState state)
