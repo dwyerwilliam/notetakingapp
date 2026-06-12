@@ -21,6 +21,7 @@ public class MainForm : Form
         InitializeEditor();
         InitializeMenu();
         InitializeStatusBar();
+        _editor.SendToBack();
         SubscribeToStore();
 
         if (initialFile is not null)
@@ -83,7 +84,7 @@ public class MainForm : Form
 
     private void InitializeEditor()
     {
-        _editor = new RichTextBox
+        _editor = new DoubleBufferedRichTextBox
         {
             Dock = DockStyle.Fill,
             Font = new Font("Consolas", 10f),
@@ -95,6 +96,15 @@ public class MainForm : Form
         _editor.TextChanged += OnEditorTextChanged;
 
         Controls.Add(_editor);
+    }
+
+    class DoubleBufferedRichTextBox : RichTextBox
+    {
+        protected override void OnHandleCreated(EventArgs e)
+        {
+            base.OnHandleCreated(e);
+            SetStyle(ControlStyles.DoubleBuffer | ControlStyles.OptimizedDoubleBuffer | ControlStyles.AllPaintingInWmPaint, true);
+        }
     }
 
     private void InitializeStatusBar()
