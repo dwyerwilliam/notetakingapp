@@ -83,7 +83,7 @@ public class MainForm : Form
 
     private void InitializeEditor()
     {
-        _editor = new DoubleBufferedRichTextBox
+        _editor = new RichTextBox
         {
             Dock = DockStyle.Fill,
             Font = new Font("Consolas", 10f),
@@ -95,15 +95,6 @@ public class MainForm : Form
         _editor.TextChanged += OnEditorTextChanged;
 
         Controls.Add(_editor);
-    }
-
-    class DoubleBufferedRichTextBox : RichTextBox
-    {
-        protected override void OnHandleCreated(EventArgs e)
-        {
-            base.OnHandleCreated(e);
-            SetStyle(ControlStyles.DoubleBuffer | ControlStyles.OptimizedDoubleBuffer | ControlStyles.AllPaintingInWmPaint, true);
-        }
     }
 
     private void InitializeStatusBar()
