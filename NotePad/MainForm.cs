@@ -120,8 +120,13 @@ public class MainForm : Form
         var gutterWidth = _lineNumbers.Width;
         var top = _menuStrip.Bottom;
         var bottom = _statusBar.Top > top ? _statusBar.Top : ClientSize.Height;
-        var editorBounds = new Rectangle(gutterWidth, top, ClientSize.Width - gutterWidth, Math.Max(0, bottom - top));
+        var height = Math.Max(0, bottom - top);
 
+        var lineNumBounds = new Rectangle(0, top, gutterWidth, height);
+        if (_lineNumbers.Bounds != lineNumBounds)
+            _lineNumbers.Bounds = lineNumBounds;
+
+        var editorBounds = new Rectangle(gutterWidth, top, ClientSize.Width - gutterWidth, height);
         if (_editor.Bounds != editorBounds)
             _editor.Bounds = editorBounds;
     }

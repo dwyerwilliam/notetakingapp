@@ -17,7 +17,6 @@ public class LineNumbers : UserControl
         _editor = editor;
 
         Width = 45;
-        Dock = DockStyle.Left;
         BackColor = SystemColors.Control;
         ForeColor = SystemColors.ControlText;
         Font = new Font("Consolas", 9f);
@@ -42,8 +41,8 @@ public class LineNumbers : UserControl
         var currentLine = _editor.GetLineFromCharIndex(_editor.SelectionStart);
         var textBounds = new Rectangle(0, 0, Width - RightPadding, lineHeight);
 
-        using var normalBrush = new SolidBrush(SystemColors.ControlDark);
-        using var currentLineBrush = new SolidBrush(SystemColors.ControlText);
+        using var normalBrush = new SolidBrush(SystemColors.ControlText);
+        using var currentLineBrush = new SolidBrush(SystemColors.Highlight);
         using var format = new StringFormat
         {
             Alignment = StringAlignment.Far,
