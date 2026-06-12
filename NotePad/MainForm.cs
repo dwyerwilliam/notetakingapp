@@ -70,7 +70,9 @@ public class MainForm : Form
             CreateMenuItem("&Copy", Keys.Control | Keys.C, OnCopy),
             CreateMenuItem("&Paste", Keys.Control | Keys.V, OnPaste),
             new ToolStripSeparator(),
-            CreateMenuItem("Select &All", Keys.Control | Keys.A, OnSelectAll)
+            CreateMenuItem("Select &All", Keys.Control | Keys.A, OnSelectAll),
+            new ToolStripSeparator(),
+            CreateMenuItem("&Find...", Keys.Control | Keys.F, OnFind)
         });
         _menuStrip.Items.Add(editMenu);
 
@@ -260,6 +262,12 @@ public class MainForm : Form
     private void OnCopy(object? sender, EventArgs e) => _editor.Copy();
     private void OnPaste(object? sender, EventArgs e) => _editor.Paste();
     private void OnSelectAll(object? sender, EventArgs e) => _editor.SelectAll();
+
+    private void OnFind(object? sender, EventArgs e)
+    {
+        using var findForm = new FindForm(_editor);
+        findForm.ShowDialog(this);
+    }
 
     private void OnAbout(object? sender, EventArgs e)
     {
