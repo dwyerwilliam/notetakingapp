@@ -18,10 +18,9 @@ public class MainForm : Form
         StartPosition = FormStartPosition.CenterScreen;
         Icon = LoadIcon();
 
-        InitializeEditor();
         InitializeMenu();
         InitializeStatusBar();
-        _editor.SendToBack();
+        InitializeEditor();
         SubscribeToStore();
 
         if (initialFile is not null)
