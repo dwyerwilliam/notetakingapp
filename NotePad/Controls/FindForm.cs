@@ -22,47 +22,40 @@ public class FindForm : Form
         MaximizeBox = false;
         MinimizeBox = false;
         ShowInTaskbar = false;
-        ClientSize = new Size(300, 90);
-        BackColor = Color.White;
-        ForeColor = Color.Black;
+        ClientSize = new Size(380, 120);
+        Padding = new Padding(2);
 
         _searchTextBox = new TextBox
         {
-            Location = new Point(10, 10),
-            Size = new Size(280, 23),
-            BackColor = Color.White,
-            ForeColor = Color.Black
+            Location = new Point(12, 12),
+            Size = new Size(360, 28),
+            Font = new Font("Segoe UI", 10f)
         };
 
         _statusLabel = new Label
         {
-            Location = new Point(10, 38),
-            Size = new Size(130, 23),
+            Location = new Point(12, 46),
+            Size = new Size(150, 28),
             TextAlign = ContentAlignment.MiddleLeft,
-            BackColor = Color.White,
-            ForeColor = Color.Black
+            Font = new Font("Segoe UI", 9f)
         };
 
         _findNextButton = new Button
         {
-            Location = new Point(145, 55),
-            Size = new Size(75, 25),
+            Location = new Point(145, 78),
+            Size = new Size(90, 32),
             Text = "Find Next",
-            BackColor = Color.White,
-            ForeColor = Color.Black,
-            UseVisualStyleBackColor = false
+            UseVisualStyleBackColor = true
         };
         _findNextButton.Click += FindNextButton_Click;
 
         _closeButton = new Button
         {
-            Location = new Point(225, 55),
-            Size = new Size(65, 25),
+            Location = new Point(240, 78),
+            Size = new Size(80, 32),
             Text = "Close",
             DialogResult = DialogResult.Cancel,
-            BackColor = Color.White,
-            ForeColor = Color.Black,
-            UseVisualStyleBackColor = false
+            UseVisualStyleBackColor = true
         };
         _closeButton.Click += (_, _) => Close();
 
