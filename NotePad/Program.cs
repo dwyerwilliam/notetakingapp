@@ -6,6 +6,7 @@ static class Program
     static void Main(string[] args)
     {
         ApplicationConfiguration.Initialize();
+        ThemeHelper.Initialize();
 
         string? filePath = null;
         if (args.Length > 0 && File.Exists(args[0]))
