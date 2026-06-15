@@ -19,7 +19,6 @@ public class LineNumbers : UserControl
         Width = 45;
         BackColor = SystemColors.Control;
         ForeColor = SystemColors.ControlText;
-        Font = new Font("Consolas", 9f);
         DoubleBuffered = true;
     }
 
@@ -36,8 +35,8 @@ public class LineNumbers : UserControl
             return;
 
         var firstVisibleLine = SendMessage(_editor.Handle, EM_GETFIRSTVISIBLELINE, 0, 0);
-        var lineHeight = Math.Max(1, (int)_editor.Font.GetHeight());
-        var visibleLineCount = (_editor.ClientSize.Height / lineHeight) + 1;
+        var lineHeight = Math.Max(1, (int)Math.Ceiling(_editor.Font.GetHeight(e.Graphics)));
+        var visibleLineCount = (_editor.ClientSize.Height / lineHeight) + 2;
         var currentLine = _editor.GetLineFromCharIndex(_editor.SelectionStart);
         var textBounds = new Rectangle(0, 0, Width - RightPadding, lineHeight);
 
@@ -55,19 +54,17 @@ public class LineNumbers : UserControl
             if (lineIndex >= _editor.Lines.Length)
                 break;
 
-            textBounds.Y = i * lineHeight;
+            var charIndex = _editor.GetFirstCharIndexFromLine(lineIndex);
+            if (charIndex < 0)
+                break;
+
+            var position = _editor.GetPositionFromCharIndex(charIndex);
+            if (position.Y >= Height)
+                break;
+
+            textBounds.Y = position.Y;
             var brush = lineIndex == currentLine ? currentLineBrush : normalBrush;
-            e.Graphics.DrawString((lineIndex + 1).ToString(), Font, brush, textBounds, format);
+            e.Graphics.DrawString((lineIndex + 1).ToString(), _editor.Font, brush, textBounds, format);
         }
-    }
-
-    protected override void Dispose(bool disposing)
-    {
-        if (disposing)
-        {
-            Font.Dispose();
-        }
-
-        base.Dispose(disposing);
     }
 }

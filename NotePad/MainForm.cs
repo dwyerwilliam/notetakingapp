@@ -98,11 +98,15 @@ public class MainForm : Form
             BackColor = SystemColors.Window,
             WordWrap = false
         };
-        _editor.TextChanged += OnEditorTextChanged;
-        _editor.VScroll += (_, _) => _lineNumbers.RefreshLineNumbers();
-        _editor.MouseUp += (_, _) => _lineNumbers.RefreshLineNumbers();
-
         _lineNumbers = new LineNumbers(_editor);
+        _editor.TextChanged += OnEditorTextChanged;
+        _editor.TextChanged += (_, _) => _lineNumbers.RefreshLineNumbers();
+        _editor.VScroll += (_, _) => _lineNumbers.RefreshLineNumbers();
+        _editor.MouseWheel += (_, _) => _lineNumbers.RefreshLineNumbers();
+        _editor.MouseUp += (_, _) => _lineNumbers.RefreshLineNumbers();
+        _editor.SelectionChanged += (_, _) => _lineNumbers.RefreshLineNumbers();
+        _editor.Resize += (_, _) => _lineNumbers.RefreshLineNumbers();
+        _editor.FontChanged += (_, _) => _lineNumbers.RefreshLineNumbers();
         Controls.AddRange(new Control[] { _lineNumbers, _editor });
     }
 

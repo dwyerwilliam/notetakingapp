@@ -47,9 +47,11 @@ NotePad/
 │   ├── Services/
 │   │   ├── DocumentStore.cs        # Central document state management
 │   │   ├── FileService.cs          # File I/O: open, save, save-as operations
-│   │   └── ThemeService.cs         # Dark/light theme detection and color management
+│   │   └── ThemeHelper.cs          # Dark/light theme detection and color management
 │   └── Controls/
-│       └── StatusBar.cs            # Custom status bar control (lines, chars, status)
+│       ├── StatusBar.cs            # Custom status bar control (lines, chars, status)
+│       ├── FindForm.cs             # Modal find dialog (Ctrl+F search)
+│       └── LineNumbers.cs          # Line number gutter (left of editor)
 └── README.md
 ```
 
