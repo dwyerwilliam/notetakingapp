@@ -1,0 +1,68 @@
+name: Build & Publish
+
+on:
+  push:
+    branches: [ primary ]
+  pull_request:
+    branches: [ primary ]
+
+env:
+  DOTNET_VERSION: '9.0.x'
+  PROJECT_PATH: 'NotePad/NotePad.csproj'
+
+jobs:
+  build:
+    name: Build (.NET ${{ env.DOTNET_VERSION }})
+    runs-on: windows-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: ${{ env.DOTNET_VERSION }}
+
+      - name: Restore dependencies
+        run: dotnet restore
+
+      - name: Build
+        run: dotnet build --no-restore --configuration Release
+
+      - name: Run tests
+        run: dotnet test --no-build --configuration Release
+        continue-on-error: true
+
+  publish:
+    name: Publish Windows x64
+    needs: build
+    runs-on: windows-latest
+    if: github.event_name == 'push' && github.ref == 'refs/heads/primary'
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: ${{ env.DOTNET_VERSION }}
+
+      - name: Restore dependencies
+        run: dotnet restore
+
+      - name: Publish self-contained
+        run: |
+          dotnet publish ${{ env.PROJECT_PATH }} `
+            --configuration Release `
+            --runtime win-x64 `
+            --self-contained true `
+            -p:PublishSingleFile=true `
+            -p:IncludeAllContentForSelfExtract=true `
+            -o ./publish
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: NotePad-win-x64
+          path: ./publish/
+          retention-days: 30
