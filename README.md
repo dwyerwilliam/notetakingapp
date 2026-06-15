@@ -4,15 +4,18 @@
 [![C#](https://img.shields.io/badge/C%23-13-blue.svg)](https://learn.microsoft.com/en-us/dotnet/csharp/)
 [![Platform](https://img.shields.io/badge/Platform-Windows%2010%2B-lightgrey.svg)](https://www.microsoft.com/software-download/windows10)
 [![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
+[![GitHub Actions](https://github.com/dwyerwilliam/notetakingapp/actions/workflows/build.yml/badge.svg)](https://github.com/dwyerwilliam/notetakingapp/actions)
+[![GitHub Release](https://img.shields.io/github/v/release/dwyerwilliam/notetakingapp?label=release)](https://github.com/dwyerwilliam/notetakingapp/releases/latest)
 
 A lightweight, modern Windows desktop note-taking application built with **.NET 9** and **Windows Forms**. Features dark mode support, line number gutter, find dialog, and a clean modular architecture designed for incremental development.
 
-![NotePad Screenshot](NotePad/Resources/notepad.png)
+![NotePad Screenshot](NotepadScreenShot.png)
 
 ---
 
 ## Table of Contents
 
+- [Download](#download)
 - [Features](#features)
 - [Tech Stack](#tech-stack)
 - [Architecture](#architecture)
