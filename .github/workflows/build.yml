@@ -3,6 +3,8 @@ name: Build & Publish
 on:
   push:
     branches: [ primary ]
+    tags:
+      - 'v*'
   pull_request:
     branches: [ primary ]
 
@@ -37,7 +39,7 @@ jobs:
     name: Publish Windows x64
     needs: build
     runs-on: windows-latest
-    if: github.event_name == 'push' && github.ref == 'refs/heads/primary'
+    if: github.event_name == 'push' && (github.ref == 'refs/heads/primary' || startsWith(github.ref, 'refs/tags/'))
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -58,6 +60,8 @@ jobs:
             --self-contained true `
             -p:PublishSingleFile=true `
             -p:IncludeAllContentForSelfExtract=true `
+            -p:AssemblyVersion=${{ github.ref_name }} `
+            -p:FileVersion=${{ github.ref_name }} `
             -o ./publish
 
       - name: Upload artifact
@@ -66,3 +70,15 @@ jobs:
           name: NotePad-win-x64
           path: ./publish/
           retention-days: 30
+
+      - name: Zip release
+        run: Compress-Archive -Path ./publish/* -DestinationPath ./NotePad-${{ github.ref_name }}.zip
+
+      - name: Create Release
+        if: startsWith(github.ref, 'refs/tags/')
+        uses: softprops/action-gh-release@v2
+        with:
+          files: ./NotePad-${{ github.ref_name }}.zip
+          generate_release_notes: true
+          draft: false
+          prerelease: false
