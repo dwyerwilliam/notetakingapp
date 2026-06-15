@@ -1,4 +1,23 @@
+## .NET / C# Build Artifacts
 bin/
 obj/
+
+## NuGet
+*.nupkg
+*.snupkg
+
+## IDE
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+.vs/
+
+## OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+## OpenCode internals
 .omo/
 .opencode/
