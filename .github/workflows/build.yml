@@ -59,8 +59,8 @@ jobs:
       - name: Set version
         shell: pwsh
         run: |
-          if ('${{ github.ref }}'.StartsWith('refs/tags/')) {
-            $version = '${{ github.ref_name }}' -replace '^v', ''
+          if ($env:GITHUB_REF -match '^refs/tags/v') {
+            $version = $env:GITHUB_REF_NAME -replace '^v', ''
             "VERSION=$version" >> $env:GITHUB_ENV
           }
 
