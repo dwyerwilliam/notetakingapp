@@ -33,7 +33,6 @@ jobs:
 
       - name: Run tests
         run: dotnet test --no-build --configuration Release
-        continue-on-error: true
 
   publish:
     name: Publish Windows x64
