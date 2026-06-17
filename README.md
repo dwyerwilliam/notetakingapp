@@ -13,6 +13,16 @@ A lightweight, modern Windows desktop note-taking application built with **.NET 
 
 ---
 
+## Download
+
+📥 **Latest Release**: [NotePad Windows x64](https://github.com/dwyerwilliam/notetakingapp/releases/latest/download/NotePad-1.0.0.zip)
+
+| Platform | Download |
+|---|---|
+| Windows x64 | [NotePad-1.0.0.zip](https://github.com/dwyerwilliam/notetakingapp/releases/latest/download/NotePad-1.0.0.zip) |
+
+---
+
 ## Table of Contents
 
 - [Download](#download)
